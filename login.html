@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      /* 🔥 TEXTURE BACKGROUND */
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+
+    .login-box {
+      width: 320px;
+      padding: 25px;
+      border-radius: 15px;
+
+      /* glass effect */
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+
+      text-align: center;
+      color: white;
+    }
+
+    .login-box h2 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      width: 95%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .login-btn {
+      background: #00c6ff;
+      color: black;
+    }
+
+    .register-btn {
+      background: #7bffb2;
+      color: black;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    #msg {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ffdddd;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="login-box">
+  <h2>Login</h2>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+
+  <label>
+    <input type="checkbox" id="remember"> Remember me
+  </label>
+
+  <button class="login-btn" onclick="login()">Sign In</button>
+  <button class="register-btn" onclick="register()">Register</button>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+window.onload = function(){
+    let remembered = localStorage.getItem("remembered");
+    let email = localStorage.getItem("remember_email");
+
+    if(remembered === "true" && email){
+        document.getElementById("email").value = email;
+        document.getElementById("remember").checked = true;
+    }
+}
+
+// REGISTER
+function register(){
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let msg = document.getElementById("msg");
+
+    if(email && password){
+        localStorage.setItem("user_email", email);
+        localStorage.setItem("user_password", password);
+
+        msg.style.color = "#7bffb2";
+        msg.innerText = "Registered successfully!";
+    } else {
+        msg.innerText = "Fill all fields!";
+    }
+}
+
+// LOGIN
+function login(){
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("password").value;
+    let remember = document.getElementById("remember").checked;
+    let msg = document.getElementById("msg");
+
+    let savedEmail = localStorage.getItem("user_email");
+    let savedPassword = localStorage.getItem("user_password");
+
+    if(email === savedEmail && password === savedPassword){
+
+        // REMEMBER ME
+        if(remember){
+            localStorage.setItem("remembered", "true");
+            localStorage.setItem("remember_email", email);
+        } else {
+            localStorage.setItem("remembered", "false");
+            localStorage.removeItem("remember_email");
+        }
+
+        msg.style.color = "#7bffb2";
+        msg.innerText = "Login successful! Redirecting...";
+
+        setTimeout(()=>{
+            window.location.href = "index.html";
+        },1000);
+
+    } else {
+        msg.innerText = "Wrong email or password!";
+    }
+}
+</script>
+
+</body>
+</html>
